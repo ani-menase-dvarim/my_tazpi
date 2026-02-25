@@ -14,7 +14,7 @@ jobs:
 
   call-security-scan:
     uses:  ani-menase-dvarim/devops/.github/workflows/ci.yml@main
-    secrets: inherit # This passes the Gitleaks/GitHub tokens automatically
+    secrets: inherit 
 
   deploy:
     runs-on: 'ubuntu-latest' 
