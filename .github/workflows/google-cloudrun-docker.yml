@@ -24,7 +24,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   sast:
-    name: SAST (CodeQL)
+    name: SAST (CodeQL) 
     runs-on: ubuntu-latest
     permissions:
       actions: read
