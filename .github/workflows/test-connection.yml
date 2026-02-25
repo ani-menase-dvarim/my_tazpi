@@ -1,9 +1,0 @@
-name: TEST CONNECTION
-on:
-  push:
-    branches: [main] # Triggers when you push to main
-
-jobs:
-  call-debug:
-    # Replace 'my-org' with your actual organization name
-    uses: ani-menase-dvarim/devops/.github/workflows/debug-reusable.yml@main
