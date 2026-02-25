@@ -4,70 +4,12 @@ on:
   push:
     branches: [main]
 
-env:
-  PROJECT_ID: 'project-45559db3-23a9-495a-9f3'
-  REGION: 'me-west1'
-  SERVICE: 'tazpi-registry'
-  WORKLOAD_IDENTITY_PROVIDER: 'projects/123456789/locations/global/workloadIdentityPools/my-pool/providers/my-provider' # TODO: update to your workload identity provider
-
 jobs:
 
   call-security-scan:
     uses:  ani-menase-dvarim/devops/.github/workflows/ci.yml@main
-    secrets: inherit 
-
-  deploy:
-    runs-on: 'ubuntu-latest'  
-
     permissions:
-      contents: 'read'
-      id-token: 'write'
-
-    steps:
-      - name: 'Checkout'
-        uses: 'actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332' # actions/checkout@v4
-
-##########Auth to GCP############3
-      
-      - id: 'auth'
-        name: 'Authenticate to Google Cloud'
-        uses: 'google-github-actions/auth@v3'
-        with:
-          credentials_json: '${{ secrets.GOOGLE_CREDENTIALS }}' # Replace with the name of your GitHub Actions secret
-
-##########Log into Artifcats in GCP#########
-
-      - name: Log in to Artifact Registry Docker
-        run: |
-          echo 'logging into registry'
-          gcloud auth configure-docker me-west1-docker.pkg.dev
-
-############Build And Push##########
-
-      - name: Build and Push Docker Image
-        run: |
-          # Define image name and tag
-          IMAGE_NAME="tazpi_test"
-          IMAGE_TAG="latest"
-          IMAGE_URI="${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVICE }}/${IMAGE_NAME}:${IMAGE_TAG}"
-
-          # Build and tag the image
-          docker build . -t $IMAGE_URI
-
-          # Push the image to Artifact Registry
-          docker push $IMAGE_URI
-
-##########DEPLOY############
-          
-      - name: 'Deploy to Cloud Run'
-        uses: 'google-github-actions/deploy-cloudrun@33553064113a37d688aa6937bacbdc481580be17' # google-github-actions/deploy-cloudrun@v2
-        with:
-          # NOTE: If using a pre-built image, update the image name below:
-          service: 'tazpi-registry'
-          region: 'me-west1'
-          image: "${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/tazpi-registry/tazpi_test:latest"
-      # If required, use the Cloud Run URL output in later steps
-      - name: 'Show output'
-        run: |2-
-
-          echo ${{ steps.deploy.outputs.url }}
+      actions: read
+      contents: read
+      security-events: write  # Mandatory for CodeQL results
+    secrets: inherit 
