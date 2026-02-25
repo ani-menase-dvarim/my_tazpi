@@ -11,33 +11,10 @@ env:
   WORKLOAD_IDENTITY_PROVIDER: 'projects/123456789/locations/global/workloadIdentityPools/my-pool/providers/my-provider' # TODO: update to your workload identity provider
 
 jobs:
-  secret-scan:
-    name: Secret Detection (Gitleaks)
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 1
-      - uses: gitleaks/gitleaks-action@v2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  sast:
-    name: SAST (CodeQL) 
-    runs-on: ubuntu-latest
-    permissions:
-      actions: read
-      security-events: write
-      contents: read
-    steps:
-      - uses: actions/checkout@v4
-      - uses: github/codeql-action/init@v3
-        with:
-          languages: javascript-typescript
-      - uses: github/codeql-action/autobuild@v3
-      - uses: github/codeql-action/analyze@v3
-        with:
-          upload: never
+  call-security-scan:
+    uses: your-org-name/security-templates/.github/workflows/security-suite.yml@main
+    secrets: inherit # This passes the Gitleaks/GitHub tokens automatically
 
   deploy:
     runs-on: 'ubuntu-latest'
