@@ -13,7 +13,7 @@ env:
 jobs:
 
   call-security-scan:
-    uses: your-org-name/security-templates/.github/workflows/security-suite.yml@main
+    uses:  ani-menase-dvarim/devops/.github/workflows/ci.yml@main
     secrets: inherit # This passes the Gitleaks/GitHub tokens automatically
 
   deploy:
